@@ -35,15 +35,6 @@ void ErastothenesWorker::run()
 {
     pauseBool = false;
     stopBool = false;
-    int result = doWork(this->n);
-    if (result == 0) {
-    } else {
-        emit resultReady(result);
-    }
-}
-
-int ErastothenesWorker::doWork(int n)
-{
     // initialize array with all elements as true
     bool prime[n+1];
     memset(prime, true, sizeof(prime));
@@ -55,7 +46,6 @@ int ErastothenesWorker::doWork(int n)
     int partialSteps;
     int currentStep = 0;
     for (int p = 2; p <= limit; p++) {
-        qDebug() << "Erastothenes working...";
         partialProgress = (float) log(p) / log(limit) * 100;
         partialSteps = floor( ((n - (p*p)) / p) + 1);
         currentStep = 0;
@@ -67,7 +57,7 @@ int ErastothenesWorker::doWork(int n)
                 if (stopBool) {
                     stopBool = false;
                     emit requestUpdate(0);
-                    return 0;
+                    return;
                 }
                 prime[i] = false;
                 emit requestUpdate(prevPartialProgress + (((partialProgress - prevPartialProgress) / partialSteps) * currentStep));
@@ -77,21 +67,22 @@ int ErastothenesWorker::doWork(int n)
         prevPartialProgress = partialProgress;
     }
 
-    qDebug() << "Erastothenes counting...";
+    // go through all numbers and count/display primes
     int number_of_primes = 0;
+    QString string = "";
     for (int p = 2; p <= n; p++) {
         checkCondition();
         if (stopBool) {
             stopBool = false;
             emit requestUpdate(0);
-            return 0;
+            return;
         }
         if (prime[p]) {
-            // optionally print out the numbers
+            string.append(QString::number(p)).append(", ");
             number_of_primes++;
         }
     }
-
-    qDebug() << "Erastothenes done...";
-    return number_of_primes;
+    if (number_of_primes > 0) {
+        emit resultReady(string, number_of_primes);
+    }
 }

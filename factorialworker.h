@@ -18,14 +18,15 @@ class FactorialWorker: public QThread
     protected:
         void run();
     private:
+        int max = 500000;
         QMutex mutex;
         QWaitCondition waitCondition;
         bool pauseBool;
         bool stopBool;
-        quint64 factorial(int n);
+        int multiply(int x, int res[], int res_size);
     signals:
         void requestUpdate(int progress);
-        void resultReady(quint64 result);
+        void resultReady(QString string, int count);
 
 };
 

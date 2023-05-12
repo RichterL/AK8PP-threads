@@ -30,12 +30,12 @@ private slots:
     void PauseF();
     void StopF();
     void UpdateF(int progress);
-    void onResultReadyF(quint64 result);
+    void onResultReadyF(QString result, int count);
     void PlayE();
     void PauseE();
     void StopE();    
     void UpdateE(int progress);
-    void onResultReadyE(int result);
+    void onResultReadyE(QString result, int count);
 
 };
 #endif // MAINWINDOW_H

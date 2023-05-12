@@ -23,10 +23,10 @@ class ErastothenesWorker: public QThread
         bool pauseBool;
         bool stopBool;
         void checkCondition();
-        int doWork(int n);
+        void doWork(int n);
     signals:
         void requestUpdate(int progress);
-        void resultReady(int result);
+        void resultReady(QString result, int count);
 };
 
 #endif // ERASTOTHENESWORKER_H
